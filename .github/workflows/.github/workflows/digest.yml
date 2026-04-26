@@ -1,0 +1,35 @@
+name: flywheel-digest
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "If true, print the digest and the prompt but don't send"
+        required: false
+        default: "false"
+
+concurrency:
+  group: flywheel-digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run digest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AIRTABLE_PAT:      ${{ secrets.AIRTABLE_PAT }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          AIRTABLE_BASE_ID:  appVilJUh8vIlDFr8
+          AIRTABLE_TABLE_ID: tbl4KjCdTacVTV784
+          NUDGES_TABLE_ID:   tblhLdW0lJhTfFDV4
+          DRY_RUN: ${{ inputs.dry_run == 'true' && '1' || '0' }}
+        run: python digest.py
