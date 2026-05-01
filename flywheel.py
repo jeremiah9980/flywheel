@@ -223,10 +223,11 @@ def main() -> int:
     print("[slack] sent")
 
     # 3. Update Flywheel row
+    # Note: nudge counts come from the back-linked Nudges field (auto-counted
+    # by Airtable). No separate Nudge Count field needed.
     update_flywheel_row(pick["id"], {
         "Last Nudged": now_utc.isoformat(),
         "Last Action": message,
-        "Nudge Count": (f.get("Nudge Count") or 0) + 1,
     })
     print("[ok] nudge delivered end-to-end")
     return 0
