@@ -1,7 +1,38 @@
 # Flywheel
 
+[![CI](https://github.com/jeremiah9980/flywheel/actions/workflows/ci.yml/badge.svg)](https://github.com/jeremiah9980/flywheel/actions/workflows/ci.yml)
+
 Self-nudge loop + weekly review, grounded in Airtable, delivered to Slack,
 orchestrated by Claude. Runs entirely on GitHub Actions cron.
+
+## Developer setup
+
+**Requirements:** Python 3.11+
+
+```bash
+# 1. Clone and enter the repo
+git clone https://github.com/jeremiah9980/flywheel.git && cd flywheel
+
+# 2. Install developer tooling (ruff + pytest)
+make install
+# or: pip install ruff pytest
+
+# 3. Lint
+make lint      # ruff check .
+
+# 4. Auto-format
+make fmt       # ruff format .
+
+# 5. Run tests (no secrets needed — conftest stubs them out)
+make test      # pytest
+```
+
+All 28 unit tests exercise the pure-function helpers in `flywheel.py` and
+`digest.py` (datetime parsing, nudge-ID generation, row-picking logic, and
+prompt building). The test suite runs in ~0.1 s with no network access.
+
+The CI workflow (`.github/workflows/ci.yml`) runs `ruff check` + `pytest`
+automatically on every push and pull request.
 
 ```
 ┌─────────────┐   ┌─────────────────┐   ┌───────────┐   ┌─────────┐
